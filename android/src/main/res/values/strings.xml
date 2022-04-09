@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">LibGDX Live Wallpaper Template</string>
+    <string name="app_description">This shows you how to make a live wallpaper with libGDX</string>
+</resources>
