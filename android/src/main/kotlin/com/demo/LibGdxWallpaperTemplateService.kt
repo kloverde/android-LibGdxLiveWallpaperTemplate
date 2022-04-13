@@ -24,11 +24,6 @@ class LibGdxWallpaperTemplateService : AndroidLiveWallpaperService() {
       val config = AndroidApplicationConfiguration()
       val listener: ApplicationListener = MyLiveWallpaperListener()
 
-      // According to the libGDX docs, explicitly disabling this saves battery.
-      // Dunno why this wouldn't be set based on AndroidManifest permissions...
-      config.useAccelerometer = false
-      config.useCompass = false
-
       initialize(listener, config)
    }
 
