@@ -45,7 +45,7 @@ Error while Launching activity
 Failed to launch an application on all devices
 ```
 
-This is from a bad Run/Debug configuration, not your project.
+This is because your Run/Debug configuration isn't tailored to live wallpapers.  It's not an issue with your project.
 
 1. Go to `Run -> Edit Configurations -> [your app] -> Launch Options`
 2. Change the `Launch` dropdown menu from `Default Activity` to `Nothing`.
