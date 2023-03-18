@@ -1,0 +1,33 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        appName = "LibGDX Wallpaper Template"
+        kotlinVersion = '1.6.21'
+        gdxVersion = '1.11.0'
+        roboVMVersion = "2.3.15"
+        box2DLightsVersion = "1.5"
+        ashleyVersion = "1.7.4"
+        aiVersion = "1.8.2"
+        gdxControllersVersion = "2.2.1"
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

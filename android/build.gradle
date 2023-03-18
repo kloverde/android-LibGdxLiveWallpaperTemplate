@@ -1,0 +1,122 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-kapt"
+}
+
+android {
+    compileSdkVersion 33
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.demo"
+        minSdk 23
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/robovm/ios/robovm.xml']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ["libs"]
+        }
+    }
+    namespace 'com.demo'
+
+    // This sourceSets block (or what remains of it) is from the libgdx code generator.
+    // It was overriding the automatic configuration of the Android plugin to use
+    // non-standard locations for manifest.srcFile, java.srcDirs and res.srcDirs.  The
+    // only thing needed to get the template project running was the jniLibs.  The
+    // remaining ones are libgdx things and I don't know what they're for, so I left
+    // them here for future reference.
+    /*
+    sourceSets {
+        main {
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+        }
+    }
+    */
+}
+
+// called every time gradle gets executed, takes the native dependencies of
+// the natives configuration, and extracts them to the proper libs/ folders
+// so they get packed with the APK.
+task copyAndroidNatives {
+    doFirst {
+        file("libs/armeabi/").mkdirs()
+        file("libs/armeabi-v7a/").mkdirs()
+        file("libs/arm64-v8a/").mkdirs()
+        file("libs/x86_64/").mkdirs()
+        file("libs/x86/").mkdirs()
+
+        configurations.natives.copy().files.each { jar ->
+            def outputDir = null
+            if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
+            if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
+            if(jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
+            if(jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+            if(jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+            if(outputDir != null) {
+                copy {
+                    from zipTree(jar)
+                    into outputDir
+                    include "*.so"
+                }
+            }
+        }
+    }
+}
+
+tasks.whenTaskAdded { packageTask ->
+    if (packageTask.name.contains("package")) {
+        packageTask.dependsOn 'copyAndroidNatives'
+    }
+}
+
+configurations { natives }
+
+dependencies {
+    //implementation "androidx.core:core-ktx:1.7.0"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation 'com.google.android.material:material:1.8.0'
+
+    testImplementation "junit:junit:4.13.2"
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // libGDX code generator entries below this line
+
+    api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+}
