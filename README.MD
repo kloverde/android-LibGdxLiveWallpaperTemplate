@@ -3,7 +3,7 @@ This project is a libGDX Android live wallpaper template.  It's the demo applica
 This is a heavy refactor of the generated project.  Here are the differences:
 
 * The launcher has been removed, as live wallpapers don't have launchers
-* The 'core' module has been removed.  It isn't needed for live wallpapers because they aren't games - you won't be targeting multiple platforms.
+* The 'core' module has been removed.  Create modules if you need 'em.
 * The directory structure, build scripts and related project files have been refactored to represent a standard Android Kotlin project
 * This project includes a copy of the unit test templates provided by the standard Android project template
 
